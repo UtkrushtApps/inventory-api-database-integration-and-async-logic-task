@@ -1,0 +1,2 @@
+-- Write SQL to create the products table.
+-- It should have: id (PK), name, sku (unique), price, quantity, created_at (default now).
