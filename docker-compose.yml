@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: inventory_db
+      POSTGRES_USER: inv_user
+      POSTGRES_PASSWORD: invpass123
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - inventorynet
+  fastapi:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/code
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+    environment:
+      DB_USER: inv_user
+      DB_PASS: invpass123
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: inventory_db
+    networks:
+      - inventorynet
+volumes:
+  pgdata:
+networks:
+  inventorynet:
